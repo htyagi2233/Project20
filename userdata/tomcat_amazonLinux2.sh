@@ -1,25 +1,15 @@
-#!/bin/bash
-sudo amazon-linux-extras install epel -y
-yum update -y
+# Update the package list
+sudo yum update -y
 
-## install these dependencies from standard OS repositories
-yum install socat logrotate -y
+# Upgrade all installed packages to their latest versions
+sudo yum upgrade -y
 
+# Install OpenJDK 11
+sudo yum install java-11-openjdk-devel -y
 
-## install RabbitMQ and zero dependency Erlang
-yum install -y erlang rabbitmq-server
+# Install Tomcat 9 and its related packages
+# Note: Tomcat 9 might not be available in the default repositories, so we'll use Amazon's extras repository if available.
+sudo amazon-linux-extras install tomcat9 -y
 
-
-sudo yum install firewalld
-sudo systemctl start firewalld
-sudo systemctl enable firewalld
-firewall-cmd --add-port=5672/tcp
-firewall-cmd --runtime-to-permanent
-sudo systemctl start rabbitmq-server
-sudo systemctl enable rabbitmq-server
-sudo systemctl status rabbitmq-server
-sudo sh -c 'echo "[{rabbit, [{loopback_users, []}]}]." > /etc/rabbitmq/rabbitmq.config'
-sudo rabbitmqctl add_user test test
-sudo rabbitmqctl set_user_tags test administrator
-sudo systemctl restart rabbitmq-server
-
+# Install Git
+sudo yum install git –y
